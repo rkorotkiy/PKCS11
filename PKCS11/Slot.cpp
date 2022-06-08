@@ -1,20 +1,18 @@
 //#include "classes.h"
 
-#include "pkcs11.h"
-#include "PKCSExceptions.h"
-#include "CryptoProvider.h"
+
 #include "Slot.h"
-#include "Session.h"
+//#include "Session.h" 
 
 Session* Slot::OpenSession(CK_BYTE application) {
 	CK_RV rv;
 	CK_SESSION_HANDLE h_session;
 
-	rv = m_provider->GetFuncListPtr()->C_OpenSession(m_id, CKF_SERIAL_SESSION | CKF_RW_SESSION, (CK_VOID_PTR)&application, NULL_PTR, &h_session);
+	rv = m_funclistPtr->C_OpenSession(m_id, CKF_SERIAL_SESSION | CKF_RW_SESSION, (CK_VOID_PTR)&application, NULL_PTR, &h_session);
 	if (rv != CKR_OK)
 		throw RetVal(rv);
 
-	Session* session = new Session(h_session, this);
+	Session* session = new Session(h_session, m_funclistPtr);
 	return session;
 }
 
@@ -22,7 +20,7 @@ CK_TOKEN_INFO* Slot::GetTokenInfo() {
 	CK_TOKEN_INFO* info = new CK_TOKEN_INFO();
 	CK_RV rv;
 
-	rv = m_provider->GetFuncListPtr()->C_GetTokenInfo(m_id, info);
+	rv = m_funclistPtr->C_GetTokenInfo(m_id, info);
 
 	if (rv != CKR_OK)
 		throw RetVal(rv);
@@ -44,15 +42,15 @@ void Slot::InitToken(unsigned char* pin, unsigned char* label) {
 	memset(labelBuff, ' ', sizeof(labelBuff));
 	memcpy(labelBuff, label, sizeof(label));
 
-	rv = m_provider->GetFuncListPtr()->C_InitToken(m_id, pin, sizeof(pin), labelBuff);
+	rv = m_funclistPtr->C_InitToken(m_id, pin, sizeof(pin), labelBuff);
 
 	if (rv != CKR_OK)
 		throw RetVal(rv);
 }
 
-CK_FUNCTION_LIST* Slot::GetFuncListPtr() {
-	return m_provider->GetFuncListPtr();
-}
+//CK_FUNCTION_LIST* Slot::GetFuncListPtr() {
+//	return m_provider->GetFuncListPtr();
+//}
 
 CK_SLOT_ID* Slot::GetSlotId() {
 	return &m_id;

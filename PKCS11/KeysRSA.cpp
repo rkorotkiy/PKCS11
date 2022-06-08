@@ -1,9 +1,6 @@
 //#include "classes.h"
 
-#include "pkcs11.h"
-#include "PKCSExceptions.h"
 #include "KeysRSA.h"
-#include "BasicKey.h"
 
 void KeysRSA::Generate(
 	unsigned char* public_label,
@@ -19,7 +16,7 @@ void KeysRSA::Generate(
 
 	
 
-	rv = m_provider->GetFuncListPtr()->C_GenerateKeyPair(
+	rv = m_funcListPtr->C_GenerateKeyPair(
 		m_session->GetHandle(), 
 		&mechanism, 
 		GetPubTemplatePtr(public_label, public_modulusBits, public_exponent), 8,

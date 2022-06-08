@@ -1,6 +1,10 @@
 #ifndef KEYAES_H
 #define KEYAES_H
 
+#include "pkcs11.h"
+#include "PKCSExceptions.h"
+#include "BasicKey.h"
+
 class KeyAES : public BasicKey {
 private:
 
@@ -11,7 +15,7 @@ private:
 	};
 
 public:
-	KeyAES(BasicKey* bKey) : BasicKey(bKey->GetSession(), bKey->GetProvider()) {};
+	KeyAES(BasicKey* bKey) : BasicKey(bKey->GetSession(), bKey->GetFuncListPtr()) {};
 	void Generate(CK_ULONG valueLen, CK_OBJECT_HANDLE handle, unsigned char* label);
 };
 

@@ -1,13 +1,7 @@
 //#include "classes.h"
 
-#include "pkcs11.h"
-#include "tdef.h"
-#include "PKCSExceptions.h"
 #include "CryptoProvider.h"
-#include "Slot.h"
-#include <Windows.h>
-#include <libloaderapi.h>
-#include <vector>
+
 
 CryptoProvider::CryptoProvider(const wchar_t* PATH_TO_DLL) {
 	m_lib = LoadLibrary(PATH_TO_DLL);
@@ -79,7 +73,7 @@ void CryptoProvider::GetSlotCollection(CK_BBOOL tokenPresent, std::vector<Slot*>
 		throw RetVal(rv);
 
 	for (size_t i = 0; i < pulCount; ++i) {
-		slotStorage.push_back(new Slot(slotCollection[i], this));
+		slotStorage.push_back(new Slot(slotCollection[i], m_funcList));
 	}
 
 }

@@ -1,9 +1,11 @@
 #include <Windows.h>
-#include <iostream>
-#include <stdlib.h>
+
+//#include <iostream>
+//#include <stdlib.h>
 #include <vector>
 #include <libloaderapi.h>
 #include "pkcs11.h"
+
 
 //#include "classes.h"
 
@@ -14,6 +16,7 @@
 #include "BasicKey.h"
 #include "KeyAES.h"
 #include "KeysRSA.h"
+#include "tdef.h"
 
 void PrintSlots(std::vector<Slot*> slotStorage) {
 	for (size_t i = 0; i < slotStorage.size(); ++i) {
@@ -34,6 +37,13 @@ int main() {
 		CK_C_INITIALIZE_ARGS initArgs;
 
 		provider.Initialize();
+
+		
+		typedef FuncList* (CryptoProvider::*FuncList_PF) ();
+
+		FuncList_PF funcListPtr;
+		funcListPtr = &CryptoProvider::GetFuncListPtr;
+
 
 		std::vector<Slot*> slotStorage;
 		provider.GetSlotCollection(true, slotStorage);
@@ -79,7 +89,7 @@ int main() {
 
 		session->Login(CKU_USER, LoginPIN);
 
-		BasicKey basickey(session, &provider);
+		BasicKey basickey(session, (provider.*funcListPtr)() );
 		KeyAES AES(&basickey);
 		CK_OBJECT_HANDLE h_AES = NULL_PTR;
 

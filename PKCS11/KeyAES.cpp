@@ -1,15 +1,12 @@
 //#include "classes.h"
 
-#include "pkcs11.h"
-#include "PKCSExceptions.h"
 #include "KeyAES.h"
-#include "BasicKey.h"
 
 void KeyAES::Generate(CK_ULONG valueLen, CK_OBJECT_HANDLE handle, unsigned char* label) {
 
 	CK_RV rv;
 
-	rv = m_provider->GetFuncListPtr()->C_GenerateKey(m_session->GetHandle(), &m_mechanism, GetTemplatePtr(valueLen, label), 7, &handle);
+	rv = m_funcListPtr->C_GenerateKey(m_session->GetHandle(), &m_mechanism, GetTemplatePtr(valueLen, label), 7, &handle);
 	
 }
 

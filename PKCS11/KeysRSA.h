@@ -1,6 +1,10 @@
 #ifndef KEYSRSA_H
 #define KEYSRSA_H
 
+#include "pkcs11.h"
+#include "PKCSExceptions.h"
+#include "BasicKey.h"
+
 class KeysRSA : public BasicKey {
 private:
 
@@ -21,7 +25,7 @@ private:
 	};
 
 public:
-	KeysRSA(BasicKey* bKey) : BasicKey(bKey->GetSession(), bKey->GetProvider()) {};
+	KeysRSA(BasicKey* bKey) : BasicKey(bKey->GetSession(), bKey->GetFuncListPtr()) {};
 	void Generate(
 		unsigned char* public_label,
 		unsigned char* public_modulusBits,

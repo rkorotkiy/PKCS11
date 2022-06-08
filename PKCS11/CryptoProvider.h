@@ -1,6 +1,19 @@
 #ifndef CRYPTOPROVIDER_H
 #define CRYPTOPROVIDER_H
 
+#include <Windows.h>
+#include <vector>
+#include <libloaderapi.h>
+#include <vector>
+
+#include "pkcs11.h"
+#include "tdef.h"
+#include "PKCSExceptions.h"
+#include "CryptoProvider.h"
+#include "Slot.h"
+
+
+
 class CryptoProvider {
 private:
 	HINSTANCE m_lib;
@@ -20,6 +33,7 @@ public:
 	void DestroyObject(CK_SESSION_HANDLE h_session, CK_OBJECT_HANDLE* h_object);
 
 	CK_FUNCTION_LIST* GetFuncListPtr();
+
 };
 
 #endif

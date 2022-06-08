@@ -9,11 +9,11 @@
 class BasicKey {                   // абстрактная виртуальная функция generate
 protected:
 	Session* m_session;
-	CryptoProvider* m_provider;
+	CK_FUNCTION_LIST* m_funcListPtr;
 public:
-	BasicKey(Session* m_Session, CryptoProvider* m_Provider) : m_session(m_Session), m_provider(m_Provider) { }
+	BasicKey(Session* m_Session, CK_FUNCTION_LIST* m_FuncListPtr) : m_session(m_Session), m_funcListPtr(m_FuncListPtr) { }
 	Session* GetSession() { return m_session; }
-	CryptoProvider* GetProvider() { return m_provider; };
+	CK_FUNCTION_LIST* GetFuncListPtr() { return m_funcListPtr; };
 };
 
 #endif

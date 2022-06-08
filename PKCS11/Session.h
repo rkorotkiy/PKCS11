@@ -1,12 +1,16 @@
 #ifndef SESSION_H
 #define SESSION_H
 
+#include "tdef.h"
+#include"pkcs11.h"
+#include "PKCSExceptions.h"
+
 class Session {
 private:
 	CK_SESSION_HANDLE h_session;
-	Slot* m_slot;
+	CK_FUNCTION_LIST* m_funcListPtr;
 public:
-	Session(CK_SESSION_HANDLE h_Session, Slot* m_Slot) : h_session(h_Session), m_slot(m_Slot) { }
+	Session(CK_SESSION_HANDLE h_Session, FuncList* m_FuncListPtr) : h_session(h_Session), m_funcListPtr(m_FuncListPtr) { }
 	CK_SESSION_HANDLE GetHandle();
 
 	void Login(CK_USER_TYPE userType, unsigned char* PIN);
