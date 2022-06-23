@@ -1,5 +1,6 @@
 #ifndef SLOT_H
 #define SLOT_H
+
 #include "pkcs11.h"
 #include "tdef.h"
 #include "PKCSExceptions.h"

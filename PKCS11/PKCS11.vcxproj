@@ -132,13 +132,13 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="BasicKey.h" />
-    <ClInclude Include="classes.h" />
     <ClInclude Include="CryptoProvider.h" />
     <ClInclude Include="KeyAES.h" />
     <ClInclude Include="KeysRSA.h" />
     <ClInclude Include="pkcs11.h" />
     <ClInclude Include="PKCSExceptions.h" />
     <ClInclude Include="Session.h" />
+    <ClInclude Include="Signing.h" />
     <ClInclude Include="Slot.h" />
     <ClInclude Include="tdef.h" />
     <ClInclude Include="Token.h" />
@@ -148,9 +148,9 @@
     <ClCompile Include="KeyAES.cpp" />
     <ClCompile Include="KeysRSA.cpp" />
     <ClCompile Include="Session.cpp" />
+    <ClCompile Include="Signing.cpp" />
     <ClCompile Include="Slot.cpp" />
     <ClCompile Include="Source.cpp" />
-    <ClCompile Include="temp.cpp" />
     <ClCompile Include="Token.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
