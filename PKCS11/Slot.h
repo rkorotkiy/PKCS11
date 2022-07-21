@@ -13,7 +13,7 @@ private:
 public:
 	Slot(CK_SLOT_ID id, std::shared_ptr<CK_FUNCTION_LIST> m_FunclistPtr) : m_id(id), m_funcListPtr(m_FunclistPtr) { }
 
-	Session* OpenSession(CK_BYTE application);
+	std::shared_ptr<Session> OpenSession(CK_BYTE application);
 
 	CK_TOKEN_INFO* GetTokenInfo();
 	void InitToken(unsigned char* pin, unsigned char* label);

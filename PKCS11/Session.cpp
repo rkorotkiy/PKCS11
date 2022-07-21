@@ -9,8 +9,8 @@ void Session::Close() {
 
 }
 
-CK_SESSION_HANDLE Session::GetHandle() { 
-	return h_session; 
+CK_SESSION_HANDLE Session::GetHandle() {
+	return h_session;
 }
 
 void Session::Login(CK_USER_TYPE userType, unsigned char* PIN) {

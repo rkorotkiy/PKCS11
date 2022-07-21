@@ -8,7 +8,7 @@
 class KeysRSA : public BasicKey {
 private:
 
-	Session* m_session;
+	std::shared_ptr<Session> m_session;
 	std::shared_ptr<CK_FUNCTION_LIST> m_funcListPtr;
 	CK_OBJECT_HANDLE h_privateKeyHandle;
 	CK_OBJECT_HANDLE h_publicKeyHandle;
@@ -34,7 +34,7 @@ private:
 	};
 
 public:
-	KeysRSA(Session* m_Session) : m_session(m_Session), m_funcListPtr(m_Session->GetFuncListPtr()) {};
+	KeysRSA(std::shared_ptr<Session> m_Session) : m_session(m_Session), m_funcListPtr(m_Session->GetFuncListPtr()) {};
 	void Generate(
 		unsigned char* public_label,
 		unsigned char* public_modulusBits,

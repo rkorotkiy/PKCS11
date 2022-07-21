@@ -1,11 +1,11 @@
 #include "Token.h"
 
 
-CryptoProvider* Token::GetProviderPtr() {
+std::shared_ptr<CryptoProvider> Token::GetProviderPtr() {
 	return m_provider;
 }
 
-CK_TOKEN_INFO* Token::GetInfo() {
+std::shared_ptr<CK_TOKEN_INFO> Token::GetInfo() {
 	return m_info;
 }
 

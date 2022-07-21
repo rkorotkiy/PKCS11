@@ -10,7 +10,7 @@ private:
 
 	CK_OBJECT_HANDLE h_Key;
 
-	Session* m_session;
+	std::shared_ptr<Session> m_session;
 	std::shared_ptr<CK_FUNCTION_LIST> m_funcListPtr;
 
 	CK_MECHANISM m_mechanism_aes_key_gen = {
@@ -25,7 +25,7 @@ private:
 
 public:
 
-	KeyAES(Session* m_Session) : m_session(m_Session), m_funcListPtr(m_Session->GetFuncListPtr()) {};
+	KeyAES(std::shared_ptr<Session> m_Session) : m_session(m_Session), m_funcListPtr(m_Session->GetFuncListPtr()) {};
 	void Generate(CK_ULONG valueLen, unsigned char* label);
 
 	int SignInit() override;

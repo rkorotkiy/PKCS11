@@ -65,7 +65,7 @@ int main() {
 
 		PrintSlots(slotStorage);
 
-		Session* session;
+		std::shared_ptr<Session> session;
 
 		session = slotStorage[0]->OpenSession(1);
 

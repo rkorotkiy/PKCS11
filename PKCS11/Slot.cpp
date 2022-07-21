@@ -1,6 +1,6 @@
 #include "Slot.h"
 
-Session* Slot::OpenSession(CK_BYTE application) {
+std::shared_ptr<Session> Slot::OpenSession(CK_BYTE application) {
 	CK_RV rv;
 	CK_SESSION_HANDLE h_session;
 
@@ -8,7 +8,7 @@ Session* Slot::OpenSession(CK_BYTE application) {
 	if (rv != CKR_OK)
 		throw RetVal(rv);
 
-	Session* session = new Session(h_session, m_funcListPtr);
+	std::shared_ptr<Session> session(new Session(h_session, m_funcListPtr));
 	return session;
 }
 
