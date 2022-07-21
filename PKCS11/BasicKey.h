@@ -6,14 +6,25 @@
 #include "CryptoProvider.h"
 #include "Session.h"
 
-class BasicKey {                   // абстрактная виртуальная функция generate
+class BasicKey {                   
 protected:
-	Session* m_session;
-	CK_FUNCTION_LIST* m_funcListPtr;
+
 public:
-	BasicKey(Session* m_Session, CK_FUNCTION_LIST* m_FuncListPtr) : m_session(m_Session), m_funcListPtr(m_FuncListPtr) { }
-	Session* GetSession() { return m_session; }
-	CK_FUNCTION_LIST* GetFuncListPtr() { return m_funcListPtr; };
+	virtual int SignInit() = 0;
+	virtual int Sign(unsigned char* p_Data, unsigned char* Signature) = 0;
+	virtual int SignUpdate(unsigned char* Part) = 0;
+	virtual int SignFinal(unsigned char* p_Signature) = 0;
+
+	virtual int SignRecoverInit() = 0;
+	virtual int SignRecover(unsigned char* p_Data, unsigned char* p_Signature) = 0;
+
+	virtual int VerifyInit() = 0;
+	virtual int Verify(unsigned char* p_Data, unsigned char* p_Signature) = 0;
+	virtual int VerifyUpdate(unsigned char* p_Part) = 0;
+	virtual int VerifyFinal(unsigned char* p_Signature) = 0;
+
+	virtual int VerifyRecoverInit() = 0;
+	virtual int VerifyRecover(unsigned char* p_Signature, unsigned char* p_Data) = 0;
 };
 
 #endif

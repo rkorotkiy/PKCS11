@@ -1,12 +1,10 @@
-//#include "classes.h"
-
 #include "KeyAES.h"
 
-void KeyAES::Generate(CK_ULONG valueLen, CK_OBJECT_HANDLE handle, unsigned char* label) {
+void KeyAES::Generate(CK_ULONG valueLen, unsigned char* label) {
 
 	CK_RV rv;
 
-	rv = m_funcListPtr->C_GenerateKey(m_session->GetHandle(), &m_mechanism, GetTemplatePtr(valueLen, label), 7, &handle);
+	rv = m_funcListPtr->C_GenerateKey(m_session->GetHandle(), &m_mechanism_aes_key_gen, GetTemplatePtr(valueLen, label), 7, &h_Key);
 	
 }
 
@@ -27,11 +25,128 @@ CK_ATTRIBUTE* KeyAES::GetTemplatePtr(CK_ULONG valueLen, unsigned char* label) {
 		{CKA_ENCRYPT, &True, sizeof(true)}
 	};
 
-	//memcpy(keyLabel, label.c_str(), label.size() + 1);
-
 	keyLabel = label;
 	keyValueLen = valueLen;
 
 	return AESTemplate;
+
+}
+
+
+int KeyAES::SignInit() {
+
+	CK_RV rv;
+	rv = m_funcListPtr->C_SignInit(m_session->GetHandle(), &m_mechanism_aes_mac_general, h_Key);
+	if (rv != CKR_OK)
+		throw RetVal(rv);
+
+}
+
+int KeyAES::Sign(unsigned char* p_Data, unsigned char* Signature) {
+
+	unsigned long sigLen = sizeof(Signature);
+
+	CK_RV rv;
+	rv = m_funcListPtr->C_Sign(m_session->GetHandle(), p_Data, sizeof(p_Data), Signature, &sigLen);
+	if (rv != CKR_OK)
+		throw RetVal(rv);
+
+}
+
+int KeyAES::SignUpdate(unsigned char* Part) {
+
+
+
+	CK_RV rv;
+	rv = m_funcListPtr->C_SignUpdate(m_session->GetHandle(), Part, sizeof(Part));
+	if (rv != CKR_OK)
+		throw RetVal(rv);
+
+}
+
+int KeyAES::SignFinal(unsigned char* p_Signature) {
+
+	unsigned long sigLen = sizeof(p_Signature);
+
+	CK_RV rv;
+	rv = m_funcListPtr->C_SignFinal(m_session->GetHandle(), p_Signature, &sigLen);
+	if (rv != CKR_OK)
+		throw RetVal(rv);
+
+}
+
+int KeyAES::SignRecoverInit() {
+
+	CK_RV rv;
+	rv = m_funcListPtr->C_SignRecoverInit(m_session->GetHandle(), &m_mechanism_aes_mac_general, h_Key);
+	if (rv != CKR_OK)
+		throw RetVal(rv);
+
+}
+
+int KeyAES::SignRecover(unsigned char* p_Data, unsigned char* p_Signature) {
+
+	unsigned long sigLen = sizeof(p_Signature);
+
+	CK_RV rv;
+	rv = m_funcListPtr->C_SignRecover(m_session->GetHandle(), p_Data, sizeof(p_Data), p_Signature, &sigLen);
+	if (rv != CKR_OK)
+		throw RetVal(rv);
+
+}
+
+int KeyAES::VerifyInit() {
+
+	CK_RV rv;
+	rv = m_funcListPtr->C_VerifyInit(m_session->GetHandle(), &m_mechanism_aes_mac_general, h_Key);
+	if (rv != CKR_OK)
+		throw RetVal(rv);
+
+}
+
+int KeyAES::Verify(unsigned char* p_Data, unsigned char* p_Signature) {
+
+	CK_RV rv;
+	rv = m_funcListPtr->C_Verify(m_session->GetHandle(), p_Data, sizeof(p_Data), p_Signature, sizeof(p_Signature));
+	if (rv != CKR_OK)
+		throw RetVal(rv);
+
+}
+
+int KeyAES::VerifyUpdate(unsigned char* p_Part) {
+
+	CK_RV rv;
+	rv = m_funcListPtr->C_VerifyUpdate(m_session->GetHandle(), p_Part, sizeof(p_Part));
+	if (rv != CKR_OK)
+		throw RetVal(rv);
+
+}
+
+int KeyAES::VerifyFinal(unsigned char* p_Signature) {
+
+	CK_RV rv;
+	rv = m_funcListPtr->C_VerifyFinal(m_session->GetHandle(), p_Signature, sizeof(p_Signature));
+	if (rv != CKR_OK)
+		throw RetVal(rv);
+
+}
+
+int KeyAES::VerifyRecoverInit() {
+
+	CK_RV rv;
+	rv = m_funcListPtr->C_VerifyRecoverInit(m_session->GetHandle(), &m_mechanism_aes_mac_general, h_Key);
+	if (rv != CKR_OK)
+		throw RetVal(rv);
+
+}
+
+int KeyAES::VerifyRecover(unsigned char* p_Signature, unsigned char* p_Data) {
+
+	unsigned long sigLen = sizeof(p_Signature);
+
+	CK_RV rv;
+	rv = m_funcListPtr->C_VerifyRecover(m_session->GetHandle(), p_Signature, sizeof(p_Signature), p_Data, &sigLen);
+	if (rv != CKR_OK)
+		throw RetVal(rv);
 
 }

@@ -11,13 +11,12 @@
 #include "PKCSExceptions.h"
 #include "CryptoProvider.h"
 #include "Slot.h"
-
-
+#include <memory>
 
 class CryptoProvider {
 private:
 	HINSTANCE m_lib;
-	CK_FUNCTION_LIST* m_funcList;
+	std::shared_ptr<CK_FUNCTION_LIST> m_funcListPtr;
 
 	void* LoadProc(HINSTANCE, const char*);
 public:
@@ -26,13 +25,10 @@ public:
 
 	void SetFunctionList();
 	void GetSlotCollection(CK_BBOOL tokenPresent, std::vector<Slot*>& slotStorage);
-	void Initialize();  //   ???
+	void Initialize();
 	void Finalize();
 
-	void CreateObject(CK_SESSION_HANDLE h_session, CK_OBJECT_HANDLE* h_object, std::vector<CK_ATTRIBUTE>& objTemplate);
-	void DestroyObject(CK_SESSION_HANDLE h_session, CK_OBJECT_HANDLE* h_object);
-
-	CK_FUNCTION_LIST* GetFuncListPtr();
+	std::shared_ptr<CK_FUNCTION_LIST> GetFuncListPtr();
 
 };
 

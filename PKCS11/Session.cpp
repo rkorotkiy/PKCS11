@@ -1,5 +1,3 @@
-//#include "classes.h"
-
 #include "Session.h"
 
 void Session::Close() {
@@ -17,9 +15,6 @@ CK_SESSION_HANDLE Session::GetHandle() {
 
 void Session::Login(CK_USER_TYPE userType, unsigned char* PIN) {
 	CK_RV rv;
-
-	//CK_UTF8CHAR PINBuff[32];
-	//memcpy(PINBuff, PIN.c_str(), PIN.size() + 1);
 
 	rv = m_funcListPtr->C_Login(h_session, userType, PIN, sizeof(PIN));
 
@@ -39,12 +34,13 @@ void Session::Logout() {
 void Session::InitPin(unsigned char* PIN) {
 	
 	CK_RV rv;
-	
-	/*CK_UTF8CHAR PINBuff[32];
-	memcpy(PINBuff, PIN.c_str(), PIN.size() + 1);*/
 
 	rv = m_funcListPtr->C_InitPIN(h_session, PIN, sizeof(PIN));
 
 	if (rv != CKR_OK)
 		throw RetVal(rv);
+}
+
+std::shared_ptr<CK_FUNCTION_LIST> Session::GetFuncListPtr() {
+	return m_funcListPtr;
 }

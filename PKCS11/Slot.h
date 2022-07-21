@@ -9,16 +9,17 @@
 class Slot {
 private:
 	CK_SLOT_ID m_id;
-	CK_FUNCTION_LIST* m_funclistPtr;
+	std::shared_ptr<CK_FUNCTION_LIST> m_funcListPtr;
 public:
-	Slot(CK_SLOT_ID id, FuncList* m_FunclistPtr) : m_id(id), m_funclistPtr(m_FunclistPtr) { }
+	Slot(CK_SLOT_ID id, std::shared_ptr<CK_FUNCTION_LIST> m_FunclistPtr) : m_id(id), m_funcListPtr(m_FunclistPtr) { }
 
 	Session* OpenSession(CK_BYTE application);
 
 	CK_TOKEN_INFO* GetTokenInfo();
 	void InitToken(unsigned char* pin, unsigned char* label);
 
-	//CK_FUNCTION_LIST* GetFuncListPtr();
+	std::shared_ptr<CK_FUNCTION_LIST> GetFuncListPtr();
+
 	CK_SLOT_ID* GetSlotId();
 };
 

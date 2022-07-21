@@ -6,5 +6,4 @@
 typedef int (*C_GetFunctionList_decl)(CK_FUNCTION_LIST**);
 
 typedef CK_FUNCTION_LIST FuncList;
-
 #endif

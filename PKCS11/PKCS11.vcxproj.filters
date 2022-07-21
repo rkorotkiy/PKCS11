@@ -45,9 +45,6 @@
     <ClInclude Include="Token.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
-    <ClInclude Include="Signing.h">
-      <Filter>Файлы заголовков</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source.cpp">
@@ -71,8 +68,8 @@
     <ClCompile Include="Token.cpp">
       <Filter>Файлы ресурсов</Filter>
     </ClCompile>
-    <ClCompile Include="Signing.cpp">
-      <Filter>Файлы ресурсов</Filter>
+    <ClCompile Include="BasicKey.cpp">
+      <Filter>Исходные файлы</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

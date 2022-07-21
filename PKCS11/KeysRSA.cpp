@@ -1,5 +1,3 @@
-//#include "classes.h"
-
 #include "KeysRSA.h"
 
 void KeysRSA::Generate(
@@ -8,20 +6,15 @@ void KeysRSA::Generate(
 	unsigned char* public_exponent,
 	unsigned char* private_label,
 	unsigned char* private_subject,
-	unsigned char* private_id,
-	CK_OBJECT_HANDLE privateKeyHandle,
-	CK_OBJECT_HANDLE publicKeyHandle) {
+	unsigned char* private_id) {
 
 	CK_RV rv;
-
-	
-
 	rv = m_funcListPtr->C_GenerateKeyPair(
 		m_session->GetHandle(), 
-		&mechanism, 
+		&mechanism_rsa_pkcs_key_pair_gen,
 		GetPubTemplatePtr(public_label, public_modulusBits, public_exponent), 8,
 		GetPrivTemplatePtr(private_label, private_subject, private_id), 9,
-		&publicKeyHandle, &privateKeyHandle
+		&h_publicKeyHandle, &h_privateKeyHandle
 	);
 
 }
@@ -49,10 +42,6 @@ CK_ATTRIBUTE* KeysRSA::GetPubTemplatePtr(
 		{CKA_MODULUS_BITS, &modulusBits, sizeof(modulusBits)},
 		{CKA_PUBLIC_EXPONENT, &exponent, sizeof(exponent)}
 	};
-
-	/*memcpy(pub_label, public_label.c_str(), public_label.size() + 1);
-	memcpy(modulusBits, public_modulusBits.c_str(), public_modulusBits.size() + 1);
-	memcpy(exponent, public_exponent.c_str(), public_exponent.size() + 1);*/
 
 	pub_label = public_label;
 	modulusBits = public_modulusBits;
@@ -87,14 +76,128 @@ CK_ATTRIBUTE* KeysRSA::GetPrivTemplatePtr(
 		{CKA_SIGN, &True, sizeof(true)},
 	};
 
-	/*memcpy(pr_label, private_label.c_str(), private_label.size() + 1);
-	memcpy(subject, private_subject.c_str(), private_subject.size() + 1);
-	memcpy(id, private_id.c_str(), private_id.size() + 1);*/
-
 	pr_label = private_label;
 	subject = private_subject;
 	id = private_id;
 
 	return RSAPrivateKeyTemplate;
+
+}
+
+
+
+int KeysRSA::SignInit() {
+
+	CK_RV rv;
+	rv = m_funcListPtr->C_SignInit(m_session->GetHandle(), &mechanism_rsa_pkcs, h_publicKeyHandle);
+	if (rv != CKR_OK)
+		throw RetVal(rv);
+
+}
+
+int KeysRSA::Sign(unsigned char* p_Data, unsigned char* Signature) {
+
+	unsigned long sigLen = sizeof(Signature);
+
+	CK_RV rv;
+	rv = m_funcListPtr->C_Sign(m_session->GetHandle(), p_Data, sizeof(p_Data), Signature, &sigLen);
+	if (rv != CKR_OK)
+		throw RetVal(rv);
+
+}
+
+int KeysRSA::SignUpdate(unsigned char* Part) {
+
+	CK_RV rv;
+	rv = m_funcListPtr->C_SignUpdate(m_session->GetHandle(), Part, sizeof(Part));
+	if (rv != CKR_OK)
+		throw RetVal(rv);
+
+}
+
+int KeysRSA::SignFinal(unsigned char* p_Signature) {
+
+	unsigned long sigLen = sizeof(p_Signature);
+
+	CK_RV rv;
+	rv = m_funcListPtr->C_SignFinal(m_session->GetHandle(), p_Signature, &sigLen);
+	if (rv != CKR_OK)
+		throw RetVal(rv);
+
+}
+
+int KeysRSA::SignRecoverInit() {
+
+	CK_RV rv;
+	rv = m_funcListPtr->C_SignRecoverInit(m_session->GetHandle(), &mechanism_rsa_pkcs, h_publicKeyHandle);
+	if (rv != CKR_OK)
+		throw RetVal(rv);
+
+}
+
+int KeysRSA::SignRecover(unsigned char* p_Data, unsigned char* p_Signature) {
+
+	unsigned long sigLen = sizeof(p_Signature);
+
+	CK_RV rv;
+	rv = m_funcListPtr->C_SignRecover(m_session->GetHandle(), p_Data, sizeof(p_Data), p_Signature, &sigLen);
+	if (rv != CKR_OK)
+		throw RetVal(rv);
+
+}
+
+int KeysRSA::VerifyInit() {
+
+	CK_RV rv;
+	rv = m_funcListPtr->C_VerifyInit(m_session->GetHandle(), &mechanism_rsa_pkcs, h_publicKeyHandle);
+	if (rv != CKR_OK)
+		throw RetVal(rv);
+
+}
+
+int KeysRSA::Verify(unsigned char* p_Data, unsigned char* p_Signature) {
+
+	CK_RV rv;
+	rv = m_funcListPtr->C_Verify(m_session->GetHandle(), p_Data, sizeof(p_Data), p_Signature, sizeof(p_Signature));
+	if (rv != CKR_OK)
+		throw RetVal(rv);
+
+}
+
+int KeysRSA::VerifyUpdate(unsigned char* p_Part) {
+
+	CK_RV rv;
+	rv = m_funcListPtr->C_VerifyUpdate(m_session->GetHandle(), p_Part, sizeof(p_Part));
+	if (rv != CKR_OK)
+		throw RetVal(rv);
+
+}
+
+int KeysRSA::VerifyFinal(unsigned char* p_Signature) {
+
+	CK_RV rv;
+	rv = m_funcListPtr->C_VerifyFinal(m_session->GetHandle(), p_Signature, sizeof(p_Signature));
+	if (rv != CKR_OK)
+		throw RetVal(rv);
+
+}
+
+int KeysRSA::VerifyRecoverInit() {
+
+	CK_RV rv;
+	rv = m_funcListPtr->C_VerifyRecoverInit(m_session->GetHandle(), &mechanism_rsa_pkcs, h_publicKeyHandle);
+	if (rv != CKR_OK)
+		throw RetVal(rv);
+
+}
+
+int KeysRSA::VerifyRecover(unsigned char* p_Signature, unsigned char* p_Data) {
+
+	unsigned long sigLen = sizeof(p_Signature);
+
+	CK_RV rv;
+	rv = m_funcListPtr->C_VerifyRecover(m_session->GetHandle(), p_Signature, sizeof(p_Signature), p_Data, &sigLen);
+	if (rv != CKR_OK)
+		throw RetVal(rv);
 
 }

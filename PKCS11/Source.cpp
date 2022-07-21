@@ -38,10 +38,10 @@ int main() {
 		provider.Initialize();
 
 		
-		typedef FuncList* (CryptoProvider::*FuncList_PF) ();
+		/*typedef FuncList* (CryptoProvider::*FuncList_PF) ();
 
 		FuncList_PF funcListPtr;
-		funcListPtr = &CryptoProvider::GetFuncListPtr;
+		funcListPtr = &CryptoProvider::GetFuncListPtr;*/
 
 
 		std::vector<Slot*> slotStorage;
@@ -88,21 +88,17 @@ int main() {
 
 		session->Login(CKU_USER, LoginPIN);
 
-		BasicKey basickey(session, (provider.*funcListPtr)() );
-		KeyAES AES(&basickey);
-		CK_OBJECT_HANDLE h_AES = NULL_PTR;
+		KeyAES AES(session);
 
 		unsigned char AESKeyLabel[256];
 
 		std::cout << "¬ведите Label дл€ AES secret key: ";
 		std::cin >> AESKeyLabel;
 
-		AES.Generate(16, h_AES, AESKeyLabel);
+		AES.Generate(16, AESKeyLabel);
 
-		KeysRSA RSA(&basickey);
+		KeysRSA RSA(session);
 
-		CK_OBJECT_HANDLE h_RSA_pr = NULL_PTR;
-		CK_OBJECT_HANDLE h_RSA_pub = NULL_PTR;
 		unsigned char RSA_pubKeyLabel[256];
 		unsigned char RSA_modulusBits[256];
 		unsigned char RSA_exponent[256];
@@ -129,8 +125,7 @@ int main() {
 			RSA_exponent,
 			RSA_prKeylabel,
 			RSA_subject,
-			RSA_id,
-			h_RSA_pr, h_RSA_pub
+			RSA_id
 		);
 
 		session->Close();
